@@ -15,11 +15,19 @@
     />
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btn_http"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text = "xxx"
+        android:text = "http"
+    />
+
+    <Button
+        android:id="@+id/btn_https"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text = "https"
     />
 
 </LinearLayout>
