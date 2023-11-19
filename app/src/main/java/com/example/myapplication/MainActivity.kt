@@ -14,7 +14,8 @@ fun httpConnect(txt: TextView) {
 }
 
 fun httpsConnect(txt: TextView) {
-    txt.text = try { URL("https://tls13.1d.pw/").readText() } catch (e: Exception) { e.toString() }
+    //txt.text = try { URL("https://tls13.1d.pw/").readText() } catch (e: Exception) { e.toString() }
+    txt.text = try { URL("https://tls13.akamai.io/").readText() } catch (e: Exception) { e.toString() }
 }
 
 class MainActivity : ComponentActivity() {
