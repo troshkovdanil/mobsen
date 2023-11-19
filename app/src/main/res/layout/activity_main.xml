@@ -21,13 +21,19 @@
         android:layout_margin="5dp"
         android:text = "http"
     />
-
     <Button
         android:id="@+id/btn_https"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text = "https"
+    />
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text = "test"
     />
 
 </LinearLayout>
