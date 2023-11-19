@@ -1,12 +1,12 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import android.text.Layout
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import kotlinx.coroutines.*
 import java.net.URL
+import android.text.method.ScrollingMovementMethod
 
 
 fun httpConnect(txt: TextView) {
@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
 
         val txt = findViewById<TextView>(R.id.txtview)
+        txt.movementMethod = ScrollingMovementMethod()
         txt.text = "0"
 
         val btn_http = findViewById<Button>(R.id.btn_http)
