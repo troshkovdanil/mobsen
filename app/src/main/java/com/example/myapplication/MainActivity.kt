@@ -16,15 +16,65 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
 import java.net.URL
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URLEncoder
+import javax.net.ssl.HttpsURLConnection
 
 
 fun httpConnect(txt: TextView) {
     txt.text = try { URL("http://www.example.com/").readText() } catch (e: Exception) { e.toString() }
 }
+@Throws(IOException::class)
+private fun encodeParams(params: JSONObject): String? {
+    val result = StringBuilder()
+    var first = true
+    val itr = params.keys()
+    while (itr.hasNext()) {
+        val key = itr.next()
+        val value = params[key]
+        if (first) first = false else result.append("&")
+        result.append(URLEncoder.encode(key, "UTF-8"))
+        result.append("=")
+        result.append(URLEncoder.encode(value.toString(), "UTF-8"))
+    }
+    return result.toString()
+}
 
 fun httpsConnect(txt: TextView) {
     //txt.text = try { URL("https://tls13.1d.pw/").readText() } catch (e: Exception) { e.toString() }
-    txt.text = try { URL("https://tls13.akamai.io/").readText() } catch (e: Exception) { e.toString() }
+    //txt.text = try { URL("https://tls13.akamai.io/").readText() } catch (e: Exception) { e.toString() }
+    val postDataParams = JSONObject()
+    postDataParams.put("AuthUsername", "")
+    postDataParams.put("AuthPassword", "")
+    postDataParams.put("ResponseCode", "200")
+    postDataParams.put("ResponseBody", txt.text)
+    postDataParams.put("ResponseDelay", 0)
+    val url = URL("https://ptsv3.com/t/gps_dt/edit/")
+    val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
+    conn.readTimeout = 3000
+    conn.connectTimeout = 3000
+    conn.requestMethod = "POST"
+    conn.doInput = true
+    conn.doOutput = true
+    val os: OutputStream = conn.outputStream
+    val writer = BufferedWriter(OutputStreamWriter(os, "UTF-8"))
+    writer.write(encodeParams(postDataParams))
+    writer.flush()
+    writer.close()
+    os.close()
+    txt.text = "Posting..."
+    val responseCode: Int = conn.responseCode // To Check for 200
+    txt.text = responseCode.toString()
+    if (responseCode == HttpsURLConnection.HTTP_OK) {
+        txt.text = "Posting...OK"
+    }
 }
 
 class MainActivity : ComponentActivity(), LocationListener {
