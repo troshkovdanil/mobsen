@@ -101,9 +101,9 @@ class MainActivity : ComponentActivity(), LocationListener {
             CoroutineScope(Dispatchers.Default).async { httpsConnect(txt = txt) }
         }
 
-        val btn_test = findViewById<Button>(R.id.btn_clear)
+        val btn_clear = findViewById<Button>(R.id.btn_clear)
         //var cntr = 0
-        btn_test.setOnClickListener(){
+        btn_clear.setOnClickListener(){
             txt.text = ""
             /*
             val text: String = txt.text.toString()
