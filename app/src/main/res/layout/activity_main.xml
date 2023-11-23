@@ -14,27 +14,22 @@
         android:textColor="@color/black"
         android:scrollbars="vertical"
     />
-
-    <Button
-        android:id="@+id/btn_gps"
+    <ToggleButton
+        android:id="@+id/tbtn_gps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text = "gps"
-    />
-    <Button
-        android:id="@+id/btn_https"
+        android:textOff="gps off"
+        android:textOn="gps on"
+        android:onClick="onGPSToggleClicked"
+        />
+    <ToggleButton
+        android:id="@+id/tbtn_https"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text = "https"
-    />
-    <Button
-        android:id="@+id/btn_clear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text = "clear"
-    />
-
+        android:textOff="https off"
+        android:textOn="https on"
+        android:onClick="onHTTPSToggleClicked"
+        />
 </LinearLayout>
