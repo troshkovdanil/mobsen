@@ -143,7 +143,9 @@ class MainActivity : ComponentActivity(), LocationListener {
     }
     override fun onLocationChanged(location: Location) {
         val txt = findViewById<TextView>(R.id.txtview)
-        txt.append(location.latitude.toString() + "," + location.longitude.toString() + "\n")
+        txt.append(location.time.toString() + "," +
+                   location.latitude.toString() + "," +
+                   location.longitude.toString() + "\n")
     }
 
     /*
