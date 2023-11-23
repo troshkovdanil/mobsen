@@ -50,6 +50,9 @@ private fun encodeParams(params: JSONObject): String? {
 fun httpsConnect(txt: TextView) {
     //txt.text = try { URL("https://tls13.1d.pw/").readText() } catch (e: Exception) { e.toString() }
     //txt.text = try { URL("https://tls13.akamai.io/").readText() } catch (e: Exception) { e.toString() }
+    val d = try { URL("https://ptsv3.com/t/gps_dt/d/").readText() } catch (e: Exception) { e.toString() }
+    if (d != "[]")
+        return
     val postDataParams = JSONObject()
     postDataParams.put("AuthUsername", "")
     postDataParams.put("AuthPassword", "")
