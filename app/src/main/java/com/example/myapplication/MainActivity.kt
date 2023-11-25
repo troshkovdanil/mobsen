@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.Manifest
+import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -11,6 +12,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
 import android.widget.ToggleButton
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,11 +32,14 @@ class MainActivity : ComponentActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //(getSystemService(ACTIVITY_SERVICE) as ActivityManager).clearApplicationUserData()
-
         val txt = findViewById<TextView>(R.id.txtview)
         txt.movementMethod = ScrollingMovementMethod()
         txt.text = ""
+
+        val btn_reset_permissions = findViewById<Button>(R.id.btn_reset_permissions)
+        btn_reset_permissions.setOnClickListener() {
+            (getSystemService(ACTIVITY_SERVICE) as ActivityManager).clearApplicationUserData()
+        }
     }
 
     private lateinit var locationManager: LocationManager
