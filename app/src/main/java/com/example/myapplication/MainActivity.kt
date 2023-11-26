@@ -31,7 +31,6 @@ import android.content.Intent
 import android.provider.MediaStore;
 
 
-
 class MainActivity : ComponentActivity(), LocationListener {
     val REQUEST_VIDEO_CAPTURE = 123
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,18 +66,23 @@ class MainActivity : ComponentActivity(), LocationListener {
 
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
+    private var requestLocationUpdatesAlreadyDone = false
     private fun getLocation() {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f, this)
+        if (!requestLocationUpdatesAlreadyDone) {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 1000, 5f, this)
+            requestLocationUpdatesAlreadyDone = true
+        }
     }
 
     override fun onLocationChanged(location: Location) {
-        val telemetry = location.time.toString() + "," +
-                location.latitude.toString() + "," +
-                location.longitude.toString() + "\n"
+        val telemetry = location.latitude.toString() + "," +
+                location.longitude.toString() + "," +
+                location.time.toString() + "\n"
         val txt = findViewById<TextView>(R.id.txtview)
         txt.text = telemetry
     }
@@ -86,11 +90,11 @@ class MainActivity : ComponentActivity(), LocationListener {
     private lateinit var gpsJob: Job
     fun onGPSToggleClicked(view: View) {
         val on = (view as ToggleButton).isChecked
+        val txt = findViewById<TextView>(R.id.txtview)
         if (on) {
             gpsJob = CoroutineScope(Dispatchers.Main,).launch {
                 while (true) {
                     yield()
-                    val txt = findViewById<TextView>(R.id.txtview)
                     val telemetry = txt.text.toString()
                     if (telemetry == "") {
                         getLocation()
@@ -98,6 +102,8 @@ class MainActivity : ComponentActivity(), LocationListener {
                 }
             }
         } else {
+            txt.text = ""
+            requestLocationUpdatesAlreadyDone = false
             gpsJob.cancel()
         }
     }
@@ -139,6 +145,7 @@ class MainActivity : ComponentActivity(), LocationListener {
         val responseCode: Int = conn.responseCode
         if (responseCode == HttpsURLConnection.HTTP_OK) {
             txt.text = ""
+            requestLocationUpdatesAlreadyDone = false
         }
     }
 
