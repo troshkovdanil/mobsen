@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
+import android.widget.VideoView
 import android.widget.ToggleButton
 import android.widget.Button
 import androidx.activity.ComponentActivity
@@ -25,9 +26,14 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
+import android.net.Uri
+import android.content.Intent
+import android.provider.MediaStore;
+
 
 
 class MainActivity : ComponentActivity(), LocationListener {
+    val REQUEST_VIDEO_CAPTURE = 123
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,9 +42,26 @@ class MainActivity : ComponentActivity(), LocationListener {
         txt.movementMethod = ScrollingMovementMethod()
         txt.text = ""
 
+        val btn_video = findViewById<Button>(R.id.btn_video)
+        btn_video.setOnClickListener() {
+            val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+            startActivityForResult(intent, REQUEST_VIDEO_CAPTURE)
+        }
+
         val btn_reset_permissions = findViewById<Button>(R.id.btn_reset_permissions)
         btn_reset_permissions.setOnClickListener() {
             (getSystemService(ACTIVITY_SERVICE) as ActivityManager).clearApplicationUserData()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            val videoUri: Uri? = intent?.data
+            val videoView = findViewById<VideoView>(R.id.video_view)
+            videoView.setVideoURI(videoUri)
+            videoView.requestFocus()
+            videoView.start()
         }
     }
 
@@ -49,7 +72,7 @@ class MainActivity : ComponentActivity(), LocationListener {
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5f, this)
     }
 
     override fun onLocationChanged(location: Location) {

@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:id="@+id/txtview"
         android:layout_width="match_parent"
@@ -13,6 +12,20 @@
         android:layout_margin="5dp"
         android:textColor="@color/black"
         android:scrollbars="vertical"
+        />
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="5dp"
+        />
+    <Button
+        android:id="@+id/btn_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="video"
         />
     <ToggleButton
         android:id="@+id/tbtn_gps"
