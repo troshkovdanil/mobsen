@@ -11,7 +11,8 @@ import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
-import android.widget.VideoView
+import android.widget.ImageView
+//import android.widget.VideoView
 import android.widget.ToggleButton
 import android.widget.Button
 import androidx.activity.ComponentActivity
@@ -28,11 +29,14 @@ import java.net.URLEncoder
 import javax.net.ssl.HttpsURLConnection
 import android.net.Uri
 import android.content.Intent
+import android.graphics.Bitmap
 import android.provider.MediaStore;
 
 
 class MainActivity : ComponentActivity(), LocationListener {
-    val REQUEST_VIDEO_CAPTURE = 123
+    //val REQUEST_VIDEO_CAPTURE = 123
+    val REQUEST_IMAGE_CAPTURE = 321
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,11 +45,19 @@ class MainActivity : ComponentActivity(), LocationListener {
         txt.movementMethod = ScrollingMovementMethod()
         txt.text = ""
 
+        val btn_img = findViewById<Button>(R.id.btn_img)
+        btn_img.setOnClickListener() {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+        }
+
+        /*
         val btn_video = findViewById<Button>(R.id.btn_video)
         btn_video.setOnClickListener() {
             val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
             startActivityForResult(intent, REQUEST_VIDEO_CAPTURE)
         }
+        */
 
         val btn_reset_permissions = findViewById<Button>(R.id.btn_reset_permissions)
         btn_reset_permissions.setOnClickListener() {
@@ -55,6 +67,14 @@ class MainActivity : ComponentActivity(), LocationListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val img: Bitmap? = intent?.extras?.get("data") as Bitmap
+            val txt = findViewById<TextView>(R.id.txtview)
+            txt.text = img?.height.toString() + "," + img?.width.toString()
+            val imgView = findViewById<ImageView>(R.id.img_view)
+            imgView.setImageBitmap(img)
+        }
+        /*
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             val videoUri: Uri? = intent?.data
             val videoView = findViewById<VideoView>(R.id.video_view)
@@ -62,6 +82,7 @@ class MainActivity : ComponentActivity(), LocationListener {
             videoView.requestFocus()
             videoView.start()
         }
+        */
     }
 
     private lateinit var locationManager: LocationManager
